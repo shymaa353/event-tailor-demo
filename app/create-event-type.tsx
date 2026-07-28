@@ -1,0 +1,87 @@
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { colors, radius, spacing, typography } from '../constants/theme';
+
+const TYPES = ['Wedding', 'Engagement', 'Birthday', 'Baby Shower', 'Gathering', 'Other'];
+
+export default function CreateEventTypeScreen() {
+  const [selected, setSelected] = useState('Wedding');
+
+  return (
+    <View style={styles.screen}>
+      <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <Ionicons name="chevron-back" size={22} color={colors.ink} />
+      </TouchableOpacity>
+
+      <Text style={styles.title}>What are you planning?</Text>
+      <Text style={styles.sub}>Choose the type of event you're planning.</Text>
+
+      <View style={styles.list}>
+        {TYPES.map((t) => (
+          <TouchableOpacity key={t} style={styles.row} onPress={() => setSelected(t)}>
+            <Text style={styles.rowLabel}>{t}</Text>
+            <View style={[styles.radioCircle, selected === t && styles.radioCircleOn]}>
+              {selected === t && <View style={styles.radioDot} />}
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <View style={styles.dots}>
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <View key={i} style={[styles.dot, i === 0 && styles.dotActive]} />
+        ))}
+      </View>
+
+      <TouchableOpacity style={styles.primaryBtn} onPress={() => router.push('/create-event-date')}>
+        <Text style={styles.primaryBtnText}>Next</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: colors.paper, padding: spacing.xl, paddingTop: 60 },
+  backBtn: { marginBottom: spacing.md, width: 32 },
+  title: { fontSize: typography.displaySize.md, fontWeight: '700', color: colors.ink, marginBottom: 6 },
+  sub: { fontSize: typography.textSize.sm, color: colors.ash, marginBottom: spacing.lg },
+
+  list: { gap: spacing.sm, flex: 1 },
+  row: {
+    borderWidth: 1,
+    borderColor: colors.line,
+    borderRadius: radius.md,
+    paddingVertical: 13,
+    paddingHorizontal: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  rowLabel: { fontSize: 14, fontWeight: '600', color: colors.ink },
+  radioCircle: {
+    width: 19,
+    height: 19,
+    borderRadius: 10,
+    borderWidth: 1.6,
+    borderColor: colors.ashLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioCircleOn: { borderColor: colors.ink },
+  radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.ink },
+
+  dots: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginVertical: spacing.lg },
+  dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.ashLight },
+  dotActive: { width: 16, backgroundColor: colors.ink },
+
+  primaryBtn: {
+    backgroundColor: colors.ink,
+    borderRadius: radius.lg,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  primaryBtnText: { fontSize: typography.textSize.lg, fontWeight: '600', color: '#fff' },
+});
